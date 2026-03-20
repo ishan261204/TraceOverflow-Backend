@@ -17,7 +17,7 @@ app.add_middleware(
 # --- GAME DATA ---
 PHASE1_WORDS = {
     "bfbwoykk": "cheaters",
-    "yitnhccy": "firewall",
+    "egoarued": "firewall",
     "zlxhttxk": "analyzes"
 }
 
