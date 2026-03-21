@@ -2,6 +2,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import random
+import base64
+import codecs
 
 app = FastAPI()
 
@@ -62,6 +64,28 @@ def verify_final(data: Part1Guess):
 
 @app.post("/verify-hash")
 def verify_hash(data: FinalHash):
+    # 1. THE VERIFICATION (Unchanged - strictly matches the strings)
     if data.sha_hash.strip().lower() != TARGET_HASH:
         raise HTTPException(status_code=400, detail="Hash mismatch")
-    return {"success": True, "message": "SYSTEM CRACKED. DM 'hi' to @genz_sherlock to claim victory!"}
+    
+    # 2. THE DYNAMIC ENCODING (Randomizes the Instagram handle format)
+    target_handle = "@genz_sherlock"
+    techniques = ["base64", "hex", "binary", "rot13"]
+    choice = random.choice(techniques)
+    
+    if choice == "base64":
+        encoded_handle = base64.b64encode(target_handle.encode('utf-8')).decode('utf-8')
+        cipher_hint = "B64"
+    elif choice == "hex":
+        encoded_handle = target_handle.encode('utf-8').hex()
+        cipher_hint = "HEX"
+    elif choice == "binary":
+        encoded_handle = ' '.join(format(ord(c), '08b') for c in target_handle)
+        cipher_hint = "BIN"
+    elif choice == "rot13":
+        encoded_handle = codecs.encode(target_handle, 'rot_13')
+        cipher_hint = "ROT"
+        
+    message = f"SYSTEM CRACKED. DM YOUR VICTORY TO [{cipher_hint}]: {encoded_handle}"
+    
+    return {"success": True, "message": message}
