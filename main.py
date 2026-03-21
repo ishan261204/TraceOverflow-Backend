@@ -55,7 +55,10 @@ def verify_part1(data: Part1Guess):
 def verify_final(data: Part1Guess):
     if data.guess.lower() not in VALID_PHASE1_KEYS:
         raise HTTPException(status_code=400, detail="Signature mismatch")
-    return {"success": True, "master_key": ZIP_MASTER_KEY}
+    return {
+        "success": True, 
+        "hint": "Check the standard web crawler exclusion protocol."
+    }
 
 @app.post("/verify-hash")
 def verify_hash(data: FinalHash):
